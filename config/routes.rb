@@ -2,11 +2,11 @@ Rails.application.routes.draw do
   root "batches#index"
   
   resources :batches do
-    resources :interviews, except: [:destroy] do
+    resources :interviews do
       resources :answers, only: [:create, :update]
     end
-    resources :materials, only: [:new, :create, :destroy], controller: 'batch_materials', as: 'batch_materials'
-    resources :questions, only: [:new, :create, :destroy], controller: 'batch_questions', as: 'batch_questions'
+    resources :materials, only: [:new, :create, :destroy], controller: 'batch_materials'
+    resources :questions, only: [:new, :create, :destroy], controller: 'batch_questions'
   end
   
   resources :materials

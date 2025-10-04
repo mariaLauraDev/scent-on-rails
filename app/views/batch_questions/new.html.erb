@@ -22,7 +22,7 @@
 
     <!-- Formulário para criar nova pergunta -->
     <div data-tabs-target="panel" class="p-6">
-      <%= form_with model: [@batch, @question], url: batch_batch_questions_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
+      <%= form_with model: [@batch, @question], url: batch_questions_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
         <h3 class="text-lg font-semibold mb-4">Criar Nova Pergunta</h3>
         
         <div class="space-y-4">
@@ -59,7 +59,7 @@
     <div data-tabs-target="panel" class="p-6">
       <% available_questions = Question.where.not(id: @batch.question_ids) %>
       <% if available_questions.any? %>
-        <%= form_with url: batch_batch_questions_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
+        <%= form_with url: batch_questions_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
           <h3 class="text-lg font-semibold mb-4">Selecionar Pergunta Existente</h3>
           
           <div class="space-y-3 max-h-96 overflow-y-auto">

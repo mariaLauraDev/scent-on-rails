@@ -60,6 +60,7 @@ class BatchesController < ApplicationController
   def set_batch_associations
     @materials = @batch.materials.order(:name)
     @questions = @batch.questions.order(:text)
+    @interviews = @batch.interviews.order(created_at: :desc)
   end
 
   def batch_params

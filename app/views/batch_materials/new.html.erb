@@ -22,7 +22,7 @@
 
     <!-- Formulário para criar novo material -->
     <div data-tabs-target="panel" class="p-6">
-      <%= form_with model: [@batch, @material], url: batch_batch_materials_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
+      <%= form_with model: [@batch, @material], url: batch_materials_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
         <h3 class="text-lg font-semibold mb-4">Criar Novo Material</h3>
         
         <div class="space-y-4">
@@ -70,7 +70,7 @@
     <div data-tabs-target="panel" class="p-6">
       <% available_materials = Material.where.not(id: @batch.material_ids) %>
       <% if available_materials.any? %>
-        <%= form_with url: batch_batch_materials_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
+        <%= form_with url: batch_materials_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
           <h3 class="text-lg font-semibold mb-4">Selecionar Material Existente</h3>
           
           <div class="space-y-3 max-h-96 overflow-y-auto">

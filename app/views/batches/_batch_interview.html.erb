@@ -1,0 +1,66 @@
+<div class="bg-white p-6 rounded-lg shadow-md border mb-6">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-semibold">Entrevistas</h2>
+    <div class="flex gap-2">
+      <%= link_to "Nova Entrevista", new_batch_interview_path(batch), 
+          class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-sm" %>
+      <% if interviews.any? %>
+        <%= link_to "Ver Todas", batch_interviews_path(batch), 
+            class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-sm" %>
+      <% end %>
+    </div>
+  </div>
+
+  <% if interviews.any? %>
+    <div class="space-y-3">
+      <% interviews.limit(3).each do |interview| %>
+        <div class="flex justify-between items-center p-3 border rounded">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <h4 class="font-medium"><%= interview.interviewee.name %></h4>
+              <span class="px-2 py-1 text-xs rounded <%= interview.status == 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+                <%= interview.status.humanize %>
+              </span>
+            </div>
+            <div class="text-sm text-gray-600">
+              <span><%= interview.interviewee.age %> anos, <%= interview.interviewee.gender %></span>
+              <span class="mx-2">•</span>
+              <span><%= interview.interview_date&.strftime("%d/%m/%Y") %></span>
+            </div>
+            <div class="text-xs text-gray-500 mt-1">
+              <%= interview.answers.count %> de <%= batch.questions.count %> respostas
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <%= link_to "Ver", [batch, interview], class: "text-blue-600 hover:underline text-sm" %>
+            <%= link_to "Editar", edit_batch_interview_path(batch, interview), class: "text-green-600 hover:underline text-sm" %>
+          </div>
+        </div>
+      <% end %>
+      
+      <% if interviews.count > 3 %>
+        <div class="text-center text-sm text-gray-500 pt-2">
+          ... e mais <%= interviews.count - 3 %> entrevistas
+        </div>
+      <% end %>
+    </div>
+
+    <div class="mt-4 p-3 bg-gray-50 rounded-md">
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">Total de entrevistas:</span>
+        <span class="font-medium"><%= interviews.count %></span>
+      </div>
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">Concluídas:</span>
+        <span class="font-medium text-green-600"><%= interviews.where(status: 'completed').count %></span>
+      </div>
+      <% completion_rate = interviews.count > 0 ? (interviews.where(status: 'completed').count.to_f / interviews.count * 100).round(1) : 0 %>
+      <div class="flex justify-between text-sm">
+        <span class="text-gray-600">Taxa de conclusão:</span>
+        <span class="font-medium"><%= completion_rate %>%</span>
+      </div>
+    </div>
+  <% else %>
+    <p class="text-gray-500 italic">Nenhuma entrevista criada ainda.</p>
+  <% end %>
+</div>
