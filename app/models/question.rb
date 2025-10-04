@@ -6,4 +6,11 @@ class Question < ApplicationRecord
   validates :question_type, presence: true
 
   enum :question_type, { text: 'text', numeric: 'numeric', scale: 'scale', multiple_choice: 'multiple_choice', boolean: 'boolean' }
+  QUESTION_TYPE_OPTIONS = [
+    ['Texto', 'text'],
+    ['Numérico', 'numeric'],
+    ['Escala', 'scale'],
+    ['Múltipla Escolha', 'multiple_choice'],
+    ['Sim/Não', 'boolean']
+  ]
 end

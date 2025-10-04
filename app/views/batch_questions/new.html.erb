@@ -36,29 +36,15 @@
 
           <div class="grid grid-cols-2 gap-4">
             <div>
-              <%= form.label :question_type, "Tipo de Pergunta", class: "block text-sm font-medium text-gray-700" %>
+              <%= form.label :question_type, "Tipo da Resposta Esperada", class: "block text-sm font-medium text-gray-700" %>
               <%= form.select :question_type, 
-                  options_for_select([
-                    ['Texto', 'text'],
-                    ['Numérico', 'numeric'],
-                    ['Escala', 'scale'],
-                    ['Múltipla Escolha', 'multiple_choice'],
-                    ['Sim/Não', 'boolean']
-                  ], @question.question_type), 
+                  options_for_select(Question::QUESTION_TYPE_OPTIONS, @question.question_type), 
                   { prompt: 'Selecione um tipo' },
                   { class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" } %>
               <% if @question.errors[:question_type].any? %>
                 <p class="mt-1 text-sm text-red-600"><%= @question.errors[:question_type].first %></p>
               <% end %>
             </div>
-          </div>
-
-          <div>
-            <%= form.label :description, "Descrição/Observações", class: "block text-sm font-medium text-gray-700" %>
-            <%= form.text_area :description, rows: 3, class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" %>
-            <% if @question.errors[:description].any? %>
-              <p class="mt-1 text-sm text-red-600"><%= @question.errors[:description].first %></p>
-            <% end %>
           </div>
         </div>
 
@@ -82,9 +68,6 @@
                 <%= radio_button_tag :existing_question_id, question.id, false, class: "mr-3 mt-1" %>
                 <div class="flex-1">
                   <div class="font-medium"><%= question.text %></div>
-                  <% if question.description.present? %>
-                    <div class="text-sm text-gray-600 mt-1"><%= question.description %></div>
-                  <% end %>
                   <span class="inline-block px-2 py-1 text-xs bg-gray-100 rounded mt-2">
                     <%= question.question_type.humanize %>
                   </span>
