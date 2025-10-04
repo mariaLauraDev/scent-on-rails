@@ -1,6 +1,5 @@
 class Question < ApplicationRecord
-  has_many :batch_questions, dependent: :destroy
-  has_many :batches, through: :batch_questions
+  has_and_belongs_to_many :batches
   has_many :answers, dependent: :destroy
 
   validates :text, presence: true

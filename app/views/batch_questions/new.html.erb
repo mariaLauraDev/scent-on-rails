@@ -1,0 +1,109 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Adicionar Pergunta ao Lote</h1>
+    <%= link_to "Voltar", @batch, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+
+  <div class="bg-white p-6 rounded-lg shadow-md border mb-6">
+    <h2 class="text-xl font-semibold mb-4">Lote: <%= @batch.name %></h2>
+    <p class="text-gray-600"><%= @batch.description %></p>
+  </div>
+
+  <!-- Tabs para escolher entre criar nova ou selecionar existente -->
+  <div class="bg-white rounded-lg shadow-md border overflow-hidden" data-controller="tabs">
+    <div class="flex border-b">
+      <button data-tabs-target="tab" data-action="click->tabs#tabClicked" class="flex-1 px-6 py-4 text-center font-medium text-gray-500 hover:text-gray-700">
+        Criar Nova Pergunta
+      </button>
+      <button data-tabs-target="tab" data-action="click->tabs#tabClicked" class="flex-1 px-6 py-4 text-center font-medium text-gray-500 hover:text-gray-700">
+        Selecionar Pergunta Existente
+      </button>
+    </div>
+
+    <!-- Formulário para criar nova pergunta -->
+    <div data-tabs-target="panel" class="p-6">
+      <%= form_with model: [@batch, @question], url: batch_batch_questions_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
+        <h3 class="text-lg font-semibold mb-4">Criar Nova Pergunta</h3>
+        
+        <div class="space-y-4">
+          <div>
+            <%= form.label :text, "Texto da Pergunta", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_area :text, rows: 2, class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" %>
+            <% if @question.errors[:text].any? %>
+              <p class="mt-1 text-sm text-red-600"><%= @question.errors[:text].first %></p>
+            <% end %>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <%= form.label :question_type, "Tipo de Pergunta", class: "block text-sm font-medium text-gray-700" %>
+              <%= form.select :question_type, 
+                  options_for_select([
+                    ['Texto', 'text'],
+                    ['Numérico', 'numeric'],
+                    ['Escala', 'scale'],
+                    ['Múltipla Escolha', 'multiple_choice'],
+                    ['Sim/Não', 'boolean']
+                  ], @question.question_type), 
+                  { prompt: 'Selecione um tipo' },
+                  { class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" } %>
+              <% if @question.errors[:question_type].any? %>
+                <p class="mt-1 text-sm text-red-600"><%= @question.errors[:question_type].first %></p>
+              <% end %>
+            </div>
+          </div>
+
+          <div>
+            <%= form.label :description, "Descrição/Observações", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_area :description, rows: 3, class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" %>
+            <% if @question.errors[:description].any? %>
+              <p class="mt-1 text-sm text-red-600"><%= @question.errors[:description].first %></p>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="flex gap-4 mt-6">
+          <%= form.submit "Criar Pergunta", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+          <%= link_to "Cancelar", @batch, class: "bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Formulário para selecionar pergunta existente -->
+    <div data-tabs-target="panel" class="p-6">
+      <% available_questions = Question.where.not(id: @batch.question_ids) %>
+      <% if available_questions.any? %>
+        <%= form_with url: batch_batch_questions_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
+          <h3 class="text-lg font-semibold mb-4">Selecionar Pergunta Existente</h3>
+          
+          <div class="space-y-3 max-h-96 overflow-y-auto">
+            <% available_questions.each do |question| %>
+              <label class="flex items-start p-3 border rounded hover:bg-gray-50 cursor-pointer">
+                <%= radio_button_tag :existing_question_id, question.id, false, class: "mr-3 mt-1" %>
+                <div class="flex-1">
+                  <div class="font-medium"><%= question.text %></div>
+                  <% if question.description.present? %>
+                    <div class="text-sm text-gray-600 mt-1"><%= question.description %></div>
+                  <% end %>
+                  <span class="inline-block px-2 py-1 text-xs bg-gray-100 rounded mt-2">
+                    <%= question.question_type.humanize %>
+                  </span>
+                </div>
+              </label>
+            <% end %>
+          </div>
+
+          <div class="flex gap-4 mt-6">
+            <%= form.submit "Adicionar Pergunta Selecionada", class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+            <%= link_to "Cancelar", @batch, class: "bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="text-center py-8">
+          <p class="text-gray-500 mb-4">Todas as perguntas disponíveis já foram adicionadas ao lote.</p>
+          <p class="text-sm text-gray-400">Use a aba "Criar Nova Pergunta" para adicionar uma pergunta inédita.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

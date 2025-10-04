@@ -6,8 +6,8 @@ class BatchesController < ApplicationController
   end
 
   def show
-    @materials = @batch.materials.joins(:batch_materials).order('batch_materials.position')
-    @questions = @batch.questions.joins(:batch_questions).order('batch_questions.position')
+    @materials = @batch.materials.order(:name)
+    @questions = @batch.questions.order(:text)
     @interviews = @batch.interviews.includes(:user).order(created_at: :desc)
   end
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_04_152518) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_04_193259) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,6 +54,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_04_152518) do
     t.string "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "batches_materials", id: false, force: :cascade do |t|
+    t.bigint "batch_id", null: false
+    t.bigint "material_id", null: false
+    t.index ["batch_id", "material_id"], name: "index_batches_materials_on_batch_id_and_material_id", unique: true
+    t.index ["material_id", "batch_id"], name: "index_batches_materials_on_material_id_and_batch_id"
+  end
+
+  create_table "batches_questions", id: false, force: :cascade do |t|
+    t.bigint "batch_id", null: false
+    t.bigint "question_id", null: false
+    t.index ["batch_id", "question_id"], name: "index_batches_questions_on_batch_id_and_question_id", unique: true
+    t.index ["question_id", "batch_id"], name: "index_batches_questions_on_question_id_and_batch_id"
   end
 
   create_table "interviewees", force: :cascade do |t|
