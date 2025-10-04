@@ -5,13 +5,13 @@
       <p class="text-gray-600 mb-2"><%= batch.description %></p>
       <div class="flex gap-4 text-sm text-gray-500">
         <span>Status: <span class="px-2 py-1 bg-gray-100 rounded"><%= batch.status.humanize %></span></span>
-        <span>Start Date: <%= batch.start_date&.strftime("%B %d, %Y") %></span>
+        <span>Início em: <%= batch.start_date&.strftime("%B %d, %Y") %></span>
       </div>
     </div>
     <div class="flex gap-2">
-      <%= link_to "View", batch, class: "text-blue-600 hover:underline" %>
-      <%= link_to "Edit", edit_batch_path(batch), class: "text-green-600 hover:underline" %>
-      <%= link_to "Delete", batch, data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this batch?" }, class: "text-red-600 hover:underline" %>
+      <%= link_to "Ver", batch, class: "text-blue-600 hover:underline" %>
+      <%= link_to "Editar", edit_batch_path(batch), class: "text-green-600 hover:underline" %>
+      <%= link_to "Excluir", batch, data: { turbo_method: :delete, turbo_confirm: "Tem certeza que deseja excluir este lote?" }, class: "text-red-600 hover:underline" %>
     </div>
   </div>
 </div>

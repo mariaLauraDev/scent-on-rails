@@ -19,10 +19,7 @@ class BatchesController < ApplicationController
     @batch = Batch.new(batch_params)
     
     if @batch.save
-      respond_to do |format|
-        format.turbo_stream { redirect_to batches_url, notice: 'Batch was successfully created.' }
-        format.html { redirect_to batches_url, notice: 'Batch was successfully created.' }
-      end
+      redirect_to batches_path, notice: 'Lote criado com sucesso!'
     else
       render :new, status: :unprocessable_entity
     end

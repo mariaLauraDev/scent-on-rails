@@ -1,0 +1,24 @@
+<div class="grid grid-cols-3 gap-4">
+  <div class="col-span-1">
+    <%= form.label :name, "Nome", class: "block text-sm font-medium text-gray-700" %>
+    <%= form.text_field :name, class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" %>
+    <% if @batch.errors[:name].any? %>
+      <p class="text-red-500 text-sm mt-1"><%= @batch.errors[:name].first %></p>
+    <% end %>
+  </div>
+  <div class="col-span-1">
+    <%= form.label :start_date, "Data deInício", class: "block text-sm font-medium text-gray-700" %>
+    <%= form.datetime_local_field :start_date, class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" %>
+  </div>
+  <div class="col-span-1">
+    <%= form.label :status, "Status", class: "block text-sm font-medium text-gray-700" %>
+    <%= form.select :status, options_for_select(Batch::STATUS_OPTIONS), {}, { class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" } %>
+    <% if @batch.errors[:status].any? %>
+      <p class="text-red-500 text-sm mt-1"><%= @batch.errors[:status].first %></p>
+    <% end %>
+  </div>
+</div>
+<div>
+  <%= form.label :description, "Descrição", class: "block text-sm font-medium text-gray-700" %>
+  <%= form.text_area :description, rows: 3, class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" %>
+</div>

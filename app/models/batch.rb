@@ -11,6 +11,12 @@ class Batch < ApplicationRecord
   validates :status, presence: true
 
   enum :status, { draft: 'draft', active: 'active', completed: 'completed', archived: 'archived' }
+  STATUS_OPTIONS = [
+    ['Rascunho', 'draft'],
+    ['Arquivado', 'draft'],
+    ['Ativo', 'active'],
+    ['Completo', 'completed'],
+  ]
 
   # Métodos úteis para análise
   def total_interviews
