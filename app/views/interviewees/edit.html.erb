@@ -1,0 +1,11 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Editar Entrevistado</h1>
+
+  <%= form_with model: @interviewee, class: "space-y-4" do |form| %>
+    <%= render "form", form: form %>
+    <div class="flex justify-end gap-4">
+      <%= form.submit "Atualizar Entrevistado", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      <%= link_to "Cancel", interviewees_path, class: "bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" %>
+    </div>
+  <% end %>
+</div>

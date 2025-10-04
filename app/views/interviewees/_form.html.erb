@@ -1,0 +1,30 @@
+<div>
+  <%= form.label :name, "Nome", class: "block text-sm font-medium text-gray-700" %>
+  <%= form.text_field :name, class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" %>
+  <% if @interviewee.errors[:name].any? %>
+    <p class="text-red-500 text-sm mt-1"><%= @interviewee.errors[:name].first %></p>
+  <% end %>
+</div>
+<div class="grid grid-cols-3 gap-4">
+  <div class="col-span-1">
+      <%= form.label :age, "Idade", class: "block text-sm font-medium text-gray-700" %>
+      <%= form.text_field :age, class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" %>
+      <% if @interviewee.errors[:age].any? %>
+          <p class="text-red-500 text-sm mt-1"><%= @interviewee.errors[:age].first %></p>
+      <% end %>
+  </div>
+  <div class="col-span-1">
+    <%= form.label :gender, "Gênero", class: "block text-sm font-medium text-gray-700" %>
+    <%= form.select :gender, options_for_select(Interviewee::GENDER_OPTIONS), {}, { class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" } %>
+    <% if @interviewee.errors[:gender].any? %>
+      <p class="text-red-500 text-sm mt-1"><%= @interviewee.errors[:gender].first %></p>
+    <% end %>
+  </div>
+  <div>
+    <%= form.label :sector, "Setor", class: "block text-sm font-medium text-gray-700" %>
+    <%= form.select :sector, options_for_select(Interviewee::SECTOR_OPTIONS), {}, { class: "mt-1 block w-full border border-gray-300 rounded-md px-3 py-2" } %>
+    <% if @interviewee.errors[:sector].any? %>
+      <p class="text-red-500 text-sm mt-1"><%= @interviewee.errors[:sector].first %></p>
+    <% end %>
+  </div>
+</div>

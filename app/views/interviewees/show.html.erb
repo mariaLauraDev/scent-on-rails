@@ -1,0 +1,75 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold"><%= @interviewee.name %></h1>
+    <div class="flex gap-2">
+      <%= link_to "Editar", edit_interviewee_path(@interviewee), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+      <%= link_to "Voltar", interviewees_path, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+    </div>
+  </div>
+
+  <!-- Informações básicas -->
+  <div class="bg-white p-6 rounded-lg shadow-md border mb-6">
+    <h2 class="text-xl font-semibold mb-4">Informações Pessoais</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div>
+        <span class="text-sm text-gray-500">Nome</span>
+        <p class="font-medium"><%= @interviewee.name %></p>
+      </div>
+      <div>
+        <span class="text-sm text-gray-500">Idade</span>
+        <p class="font-medium"><%= @interviewee.age %> anos</p>
+      </div>
+      <div>
+        <span class="text-sm text-gray-500">Gênero</span>
+        <p class="font-medium"><%= @interviewee.gender.humanize %></p>
+      </div>
+      <div>
+        <span class="text-sm text-gray-500">Setor</span>
+        <p class="font-medium"><%= @interviewee.sector.humanize %></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Histórico de entrevistas -->
+  <div class="bg-white p-6 rounded-lg shadow-md border">
+    <h2 class="text-xl font-semibold mb-4">Histórico de Entrevistas</h2>
+    
+    <% if @interviews.any? %>
+      <div class="space-y-4">
+        <% @interviews.each do |interview| %>
+          <div class="border-l-4 border-blue-500 pl-4 py-2">
+            <div class="flex justify-between items-start">
+              <div>
+                <h3 class="font-medium"><%= interview.batch.name %></h3>
+                <p class="text-sm text-gray-600">
+                  Data: <%= interview.interview_date.strftime("%d/%m/%Y às %H:%M") %>
+                </p>
+                <span class="inline-block px-2 py-1 text-xs rounded <%= 
+                  case interview.status
+                  when 'completed' then 'bg-green-100 text-green-800'
+                  when 'in_progress' then 'bg-blue-100 text-blue-800'
+                  when 'pending' then 'bg-yellow-100 text-yellow-800'
+                  else 'bg-gray-100 text-gray-800'
+                  end
+                %>">
+                  <%= interview.status.humanize %>
+                </span>
+              </div>
+              <div>
+                <span class="text-sm text-gray-500">
+                  <%= interview.answers.count %> respostas
+                </span>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center py-8">
+        <p class="text-gray-500">Nenhuma entrevista realizada ainda.</p>
+        <%= link_to "Nova Entrevista", new_batch_interview_path(@interviewee.batches.first || 1), 
+            class: "text-blue-600 hover:underline" if @interviewee.batches.any? %>
+      </div>
+    <% end %>
+  </div>
+</div>
