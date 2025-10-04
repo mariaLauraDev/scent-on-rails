@@ -8,7 +8,6 @@ class BatchMaterialsController < ApplicationController
 
   def create
     if params[:existing_material_id].present?
-      # Selecionar material existente
       @material = Material.find(params[:existing_material_id])
       @batch.materials << @material
       redirect_to @batch, notice: 'Material adicionado ao lote com sucesso!'
