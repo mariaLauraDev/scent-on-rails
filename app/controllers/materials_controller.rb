@@ -1,7 +1,11 @@
 class MaterialsController < ApplicationController
-  before_action :set_material, only: [:show, :edit, :update, :destroy]
-
   def index
-    @materials = Material.all
+    @materials = Material.includes(:batches).order(:name)
+  end
+
+  private
+
+  def set_material
+    @material = Material.find(params[:id])
   end
 end

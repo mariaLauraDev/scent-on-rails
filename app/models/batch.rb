@@ -1,8 +1,6 @@
 class Batch < ApplicationRecord
-  has_many :batch_materials, dependent: :destroy
-  has_many :materials, through: :batch_materials
-  has_many :batch_questions, dependent: :destroy
-  has_many :questions, through: :batch_questions
+  has_and_belongs_to_many :materials
+  has_and_belongs_to_many :questions
   has_many :interviews, dependent: :destroy
   has_many :interviewees, through: :interviews
   has_many :answers, through: :interviews

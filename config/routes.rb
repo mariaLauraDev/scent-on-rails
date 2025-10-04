@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     resources :interviews, except: [:destroy] do
       resources :answers, only: [:create, :update]
     end
+    resources :materials, only: [:new, :create, :destroy], controller: 'batch_materials', as: 'batch_materials'
+    resources :questions, only: [:new, :create, :destroy], controller: 'batch_questions', as: 'batch_questions'
   end
   
   resources :materials

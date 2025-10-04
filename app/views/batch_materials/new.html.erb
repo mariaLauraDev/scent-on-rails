@@ -1,0 +1,105 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Adicionar Material ao Lote</h1>
+    <%= link_to "Voltar", @batch, class: "bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" %>
+  </div>
+
+  <div class="bg-white p-6 rounded-lg shadow-md border mb-6">
+    <h2 class="text-xl font-semibold mb-4">Lote: <%= @batch.name %></h2>
+    <p class="text-gray-600"><%= @batch.description %></p>
+  </div>
+
+  <!-- Tabs para escolher entre criar novo ou selecionar existente -->
+  <div class="bg-white rounded-lg shadow-md border overflow-hidden" data-controller="tabs">
+    <div class="flex border-b">
+      <button data-tabs-target="tab" data-action="click->tabs#tabClicked" class="flex-1 px-6 py-4 text-center font-medium text-gray-500 hover:text-gray-700">
+        Criar Novo Material
+      </button>
+      <button data-tabs-target="tab" data-action="click->tabs#tabClicked" class="flex-1 px-6 py-4 text-center font-medium text-gray-500 hover:text-gray-700">
+        Selecionar Material Existente
+      </button>
+    </div>
+
+    <!-- Formulário para criar novo material -->
+    <div data-tabs-target="panel" class="p-6">
+      <%= form_with model: [@batch, @material], url: batch_batch_materials_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
+        <h3 class="text-lg font-semibold mb-4">Criar Novo Material</h3>
+        
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="col-span-1">
+              <%= form.label :name, "Nome", class: "block text-sm font-medium text-gray-700" %>
+              <%= form.text_field :name, class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" %>
+              <% if @material.errors[:name].any? %>
+                <p class="mt-1 text-sm text-red-600"><%= @material.errors[:name].first %></p>
+              <% end %>
+            </div>
+            <div class="col-span-1">
+              <%= form.label :material_type, "Tipo de Material", class: "block text-sm font-medium text-gray-700" %>
+              <%= form.select :material_type, 
+                  options_for_select([
+                    ['Fragância Base', 'base_fragrance'],
+                    ['Perfume', 'perfume'],
+                    ['Amostra de Fragância', 'fragrance_sample'],
+                    ['Outro', 'other']
+                  ], @material.material_type), 
+                  { prompt: 'Selecione um tipo' },
+                  { class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" } %>
+              <% if @material.errors[:material_type].any? %>
+                <p class="mt-1 text-sm text-red-600"><%= @material.errors[:material_type].first %></p>
+              <% end %>
+            </div>
+          </div>
+          <div>
+            <%= form.label :description, "Descrição", class: "block text-sm font-medium text-gray-700" %>
+            <%= form.text_area :description, rows: 3, class: "mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm" %>
+            <% if @material.errors[:description].any? %>
+              <p class="mt-1 text-sm text-red-600"><%= @material.errors[:description].first %></p>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="flex gap-4 mt-6">
+          <%= form.submit "Criar Material", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %>
+          <%= link_to "Cancelar", @batch, class: "bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" %>
+        </div>
+      <% end %>
+    </div>
+
+    <!-- Formulário para selecionar material existente -->
+    <div data-tabs-target="panel" class="p-6">
+      <% available_materials = Material.where.not(id: @batch.material_ids) %>
+      <% if available_materials.any? %>
+        <%= form_with url: batch_batch_materials_path(@batch), method: :post, local: true, class: "space-y-4" do |form| %>
+          <h3 class="text-lg font-semibold mb-4">Selecionar Material Existente</h3>
+          
+          <div class="space-y-3 max-h-96 overflow-y-auto">
+            <% available_materials.each do |material| %>
+              <label class="flex items-center p-3 border rounded hover:bg-gray-50 cursor-pointer">
+                <%= radio_button_tag :existing_material_id, material.id, false, class: "mr-3" %>
+                <div class="flex-1">
+                  <div class="font-medium"><%= material.name %></div>
+                  <div class="text-sm text-gray-600"><%= material.description %></div>
+                  <span class="inline-block px-2 py-1 text-xs bg-gray-100 rounded mt-1">
+                    <%= material.material_type.humanize %>
+                  </span>
+                </div>
+              </label>
+            <% end %>
+          </div>
+
+          <div class="flex gap-4 mt-6">
+            <%= form.submit "Adicionar Material Selecionado", class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" %>
+            <%= link_to "Cancelar", @batch, class: "bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded" %>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="text-center py-8">
+          <p class="text-gray-500 mb-4">Todos os materiais disponíveis já foram adicionados ao lote.</p>
+          <p class="text-sm text-gray-400">Use a aba "Criar Novo Material" para adicionar um material inédito.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
